@@ -11,65 +11,49 @@ use Illuminate\Support\Facades\DB;
 class WaitingListStatsController extends Controller
 {
     public function index(Request $request)
-    {
-        $view = $request->query('view', 'daily');
+{
+    $view = $request->query('view', 'daily'); 
 
-        // Total signups
-        $totalSignups = WaitingList::count();
-
-        // Signups by source
-        $signupsBySource = WaitingList::select('signup_source', DB::raw('count(*) as total'))
-            ->groupBy('signup_source')
-            ->get();
-
-        // Date range - last 30 days or weeks
-        if ($view === 'weekly') {
-            $start = Carbon::now()->subWeeks(30)->startOfWeek();
-            $end = Carbon::now()->endOfWeek();
-
-            $trends = WaitingList::select(
-                    DB::raw('YEAR(created_at) as year'),
-                    DB::raw('WEEK(created_at, 1) as week'),
-                    DB::raw('count(*) as total')
-                )
-                ->whereBetween('created_at', [$start, $end])
-                ->groupBy('year', 'week')
-                ->orderBy('year')
-                ->orderBy('week')
-                ->get()
-                ->map(function ($item) {
-                    return [
-                        'year' => $item->year,
-                        'week' => $item->week,
-                        'total' => $item->total,
-                    ];
-                });
-
-            // Find peak signup week
-            $peak = $trends->sortByDesc('total')->first();
-        } else {
-            // daily (default)
-            $start = Carbon::now()->subDays(30)->startOfDay();
-            $end = Carbon::now()->endOfDay();
-
-            $trends = WaitingList::select(
-                    DB::raw('DATE(created_at) as date'),
-                    DB::raw('count(*) as total')
-                )
-                ->whereBetween('created_at', [$start, $end])
-                ->groupBy('date')
-                ->orderBy('date')
-                ->get();
-
-            // Find peak signup day
-            $peak = $trends->sortByDesc('total')->first();
-        }
-
-        return response()->json([
-            'total_signups' => $totalSignups,
-            'signups_by_source' => $signupsBySource,
-            'trends' => $trends,
-            'peak_signup' => $peak,
-        ]);
+    
+    if (!in_array($view, ['daily', 'weekly'])) {
+        return response()->json(['error' => 'Invalid view type. Must be daily or weekly.'], 400);
     }
+
+   
+    $total = DB::table('waiting_lists')->count();
+
+    
+    $bySource = DB::table('waiting_lists')
+        ->select('signup_source', DB::raw('count(*) as total'))
+        ->groupBy('signup_source')
+        ->get();
+
+    
+    $trends = DB::table('waiting_lists')
+        ->selectRaw("
+            " . ($view === 'daily'
+                ? "DATE(created_at) as period"
+                : "YEARWEEK(created_at, 1) as period") . ",
+            count(*) as total
+        ")
+        ->where('created_at', '>=', now()->subDays(30))
+        ->groupBy('period')
+        ->orderBy('period')
+        ->get();
+
+    
+    $peak = DB::table('waiting_lists')
+        ->selectRaw('DATE(created_at) as date, count(*) as total')
+        ->groupBy('date')
+        ->orderByDesc('total')
+        ->limit(1)
+        ->first();
+
+    return response()->json([
+        'total_signups' => $total,
+        'by_source' => $bySource,
+        'trends' => $trends,
+        'peak_day' => $peak,
+    ]);
+}
 }
