@@ -3,26 +3,34 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-
 
 class WeeklyReportMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $stats;
+    public $total;
+    public $bySource;
+    public $peakDay;
+    public $trends;
 
-    public function __construct($stats)
+    public function __construct($total, $bySource, $peakDay, $trends)
     {
-        $this->stats = $stats;
+        $this->total = $total;
+        $this->bySource = $bySource;
+        $this->peakDay = $peakDay;
+        $this->trends = $trends;
     }
 
     public function build()
     {
-        return $this->subject('Weekly Signup Report')
-                    ->view('emails.weekly_report');
+        return $this->view('emails.weekly_report')
+                    ->with([
+                        'total' => $this->total,
+                        'bySource' => $this->bySource,
+                        'peakDay' => $this->peakDay,
+                        'trends' => $this->trends,
+                    ]);
     }
 }
-

@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\WaitingListController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Api\WaitingListStatsController;
+use App\Mail\WeeklyReportMail;
+use Illuminate\Support\Facades\DB;
+use App\Models\WaitingList;
+
 
 
 
