@@ -5,22 +5,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\WaitingListController;
 use Illuminate\Support\Facades\Auth;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+
+
+Route::post('/waiting-list', [WaitingListController::class, 'store']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/waiting-list', [WaitingListController::class, 'index']);
-    Route::post('/waiting-list', [WaitingListController::class, 'store']);
     Route::put('/waiting-list/{id}', [WaitingListController::class, 'update']);
     Route::delete('/waiting-list/{id}', [WaitingListController::class, 'destroy']);
+    //Route::get('/waiting-list/stats', [WaitingListStatsController::class, 'index']);
 });
 
 Route::post('/login', function (Request $request) {

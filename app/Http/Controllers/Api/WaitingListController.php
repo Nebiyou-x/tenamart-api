@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\WaitingList;
 use App\Http\Resources\WaitingListResource;
+use App\Http\Requests\StoreWaitingListRequest;
+use App\Http\Requests\UpdateWaitingListRequest;
 
 
 class WaitingListController extends Controller
@@ -36,17 +38,16 @@ class WaitingListController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-    $data = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:waiting_lists',
-        'signup_source' => 'required|string'
-    ]);
+public function store(StoreWaitingListRequest $request)
+{
+     \Log::info('StoreWaitingListRequest passed validation.');
+    $data = $request->validated(); // uses rules from the FormRequest class
 
     $user = WaitingList::create($data);
     return response()->json($user, 201);
-   }
+}
+
+
 
     /**
      * Display the specified resource.
@@ -66,7 +67,7 @@ class WaitingListController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateWaitingListRequest $request, $id)
     {
     $user = WaitingList::findOrFail($id);
 

@@ -23,8 +23,13 @@ class UpdateWaitingListRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+    $id = $this->route('id'); // For unique email check
+
+    return [
+        'name' => 'sometimes|string|max:255',
+        'email' => 'sometimes|email|unique:waiting_lists,email,' . $id,
+        'signup_source' => 'sometimes|string|in:referral,organic,social media',
+    ];
     }
+
 }
