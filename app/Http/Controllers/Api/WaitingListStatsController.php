@@ -7,6 +7,7 @@ use App\Models\WaitingList;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class WaitingListStatsController extends Controller
 {
@@ -58,5 +59,37 @@ public function index(Request $request)
         'peak_day' => $peakDay,
     ]);
 }
+
+
+
+public function export()
+{
+    $filename = "signup_stats_" . now()->format('Y-m-d') . ".csv";
+
+    $signups = \App\Models\WaitingList::select(
+        DB::raw('DATE(created_at) as date'),
+        DB::raw('count(*) as total')
+    )
+    ->groupBy(DB::raw('DATE(created_at)'))
+    ->orderBy('date')
+    ->get();
+
+    $response = new StreamedResponse(function () use ($signups) {
+        $handle = fopen('php://output', 'w');
+        fputcsv($handle, ['Date', 'Total Signups']);
+
+        foreach ($signups as $signup) {
+            fputcsv($handle, [$signup->date, $signup->total]);
+        }
+
+        fclose($handle);
+    });
+
+    $response->headers->set('Content-Type', 'text/csv');
+    $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+
+    return $response;
+}
+
 
 }
