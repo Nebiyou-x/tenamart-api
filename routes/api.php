@@ -16,6 +16,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/waiting-list/{id}', [WaitingListController::class, 'update']);
     Route::delete('/waiting-list/{id}', [WaitingListController::class, 'destroy']);
     Route::get('/waiting-list/stats', [WaitingListStatsController::class, 'index']);
+    Route::get('/waiting-list/stats/export', [WaitingListStatsController::class, 'export']);
+
 });
 
 Route::post('/login', function (Request $request) {

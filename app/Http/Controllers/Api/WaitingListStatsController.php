@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WeeklyReportMail;
 
 class WaitingListStatsController extends Controller
 {
@@ -89,6 +91,15 @@ public function export()
     $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
 
     return $response;
+}
+
+public function sendWeeklyReport()
+{
+    $stats = $this->generateStats();
+
+    Mail::to('takitakir64@gmail.com')->send(new WeeklyReportMail($stats));
+
+    return response()->json(['message' => 'Weekly report sent']);
 }
 
 
