@@ -10,41 +10,43 @@ use Illuminate\Support\Facades\DB;
 
 class WaitingListStatsController extends Controller
 {
-    public function index(Request $request)
+    
+public function index(Request $request)
 {
-    $view = $request->query('view', 'daily'); 
+    $view = $request->query('view', 'daily');
 
     
-    if (!in_array($view, ['daily', 'weekly'])) {
-        return response()->json(['error' => 'Invalid view type. Must be daily or weekly.'], 400);
-    }
-
-   
-    $total = DB::table('waiting_lists')->count();
+    $total = \App\Models\WaitingList::count();
 
     
-    $bySource = DB::table('waiting_lists')
-        ->select('signup_source', DB::raw('count(*) as total'))
+    $bySource = \App\Models\WaitingList::select('signup_source', DB::raw('count(*) as total'))
         ->groupBy('signup_source')
         ->get();
 
-    
-    $trends = DB::table('waiting_lists')
-        ->selectRaw("
-            " . ($view === 'daily'
-                ? "DATE(created_at) as period"
-                : "YEARWEEK(created_at, 1) as period") . ",
-            count(*) as total
-        ")
-        ->where('created_at', '>=', now()->subDays(30))
-        ->groupBy('period')
-        ->orderBy('period')
-        ->get();
+   
+    if ($view === 'weekly') {
+        $trends = \App\Models\WaitingList::select(DB::raw('YEARWEEK(created_at, 1) as week'), DB::raw('count(*) as total'))
+            ->where('created_at', '>=', now()->subDays(30))
+            ->groupBy('week')
+            ->orderBy('week')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'week' => $item->week,
+                    'total' => $item->total
+                ];
+            });
+    } else {
+        $trends = \App\Models\WaitingList::select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total'))
+            ->where('created_at', '>=', now()->subDays(30))
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy('date')
+            ->get();
+    }
 
     
-    $peak = DB::table('waiting_lists')
-        ->selectRaw('DATE(created_at) as date, count(*) as total')
-        ->groupBy('date')
+    $peakDay = \App\Models\WaitingList::select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total'))
+        ->groupBy(DB::raw('DATE(created_at)'))
         ->orderByDesc('total')
         ->limit(1)
         ->first();
@@ -53,7 +55,8 @@ class WaitingListStatsController extends Controller
         'total_signups' => $total,
         'by_source' => $bySource,
         'trends' => $trends,
-        'peak_day' => $peak,
+        'peak_day' => $peakDay,
     ]);
 }
+
 }
