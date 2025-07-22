@@ -52,7 +52,7 @@ php artisan tinker
 ## Use these or Your own desired credentials to create admin user and generate token
 
 
-## For users singup use 
+## For users singup use this format
 ```bash
 {
     "name": "Jane",
