@@ -42,9 +42,29 @@ php artisan migrate
 ### 5. Install Laravel Sanctum
 ```bash
 php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+php artisan tinker
+\App\Models\User::create([
+    'name' => 'Admin',
+    'email' => 'admin@example.com',
+    'password'.  => bcrypt('password'),
+]);
+```
+## Use these or Your own desired credentials to create admin user and generate token
+
+
+## For users singup use 
+```bash
+{
+    "name": "Jane",
+    "email": "jane@example.com",
+    "signup_source": "organic"
+}
 ```
 
+
+
 ### 6. Total API Requests
+
 
 | Method | Endpoint                   | Auth Required | Description                             |
 | ------ | -------------------------- | ------------- | --------------------------------------- |
@@ -84,9 +104,3 @@ Returns number of signups per week for the last 30 days.
 You can test the API using this Postman collection:
 
 [📥 Download Tenamart API Postman Collection](./postman/tenamart-api.postman_collection.json)
-
-To use:
-1. Download the file.
-2. Open Postman.
-3. Click **Import** > **Upload Files** > select the file.
-4. Test the endpoints easily!
