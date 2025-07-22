@@ -15,8 +15,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+    $schedule->command('report:weekly')->weeklyOn(1, '08:00'); // Every Monday at 8:00 AM
     }
+
+    protected $commands = [
+    \App\Console\Commands\SendWeeklyReport::class,
+];
 
     /**
      * Register the commands for the application.

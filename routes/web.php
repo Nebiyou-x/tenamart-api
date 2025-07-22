@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Mail\WeeklyReportMail;
 use Illuminate\Support\Facades\DB;
 use App\Models\WaitingList;
+use Illuminate\Support\Facades\Mail;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,7 +15,9 @@ use App\Models\WaitingList;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/preview-weekly-report', function () {
+
+
+Route::get('/send-weekly-report', function () {
     $total = WaitingList::count();
 
     $bySource = WaitingList::select('signup_source', DB::raw('count(*) as total'))
@@ -28,8 +31,11 @@ Route::get('/preview-weekly-report', function () {
         ->where('created_at', '>=', now()->subDays(30))
         ->groupBy(DB::raw('DATE(created_at)'))->get();
 
-    return new WeeklyReportMail($total, $bySource, $peakDay, $trends);
+    Mail::to('admin@example.com')->send(new WeeklyReportMail($total, $bySource, $peakDay, $trends));
+
+    return 'Weekly report sent!';
 });
+
 
 Route::get('/', function () {
     return view('welcome');
