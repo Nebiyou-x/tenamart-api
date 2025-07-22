@@ -52,7 +52,7 @@ php artisan tinker
 ## Use these or Your own desired credentials to create admin user and generate token
 
 
-## For users singup use this format
+## For users signup use this format
 ```bash
 {
     "name": "Jane",
@@ -60,7 +60,13 @@ php artisan tinker
     "signup_source": "organic"
 }
 ```
-
+## For admin login and get Token use this format
+```bash
+{
+  "email": "admin@example.com",
+  "password": "password"
+}
+```
 
 
 ### 6. Total API Requests
