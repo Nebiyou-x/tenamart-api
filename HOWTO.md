@@ -80,7 +80,7 @@ php artisan tinker
 | PUT    | `/api/waiting-list/{id}`   | ✅ Yes         | Update a signup by ID                   |
 | DELETE | `/api/waiting-list/{id}`   | ✅ Yes         | Delete a signup by ID                   |
 | GET    | `/api/waiting-list/stats`  | ✅ Yes         | Show signup stats (daily/weekly trends) |
-| GET    | `/api/waiting-list/export` | ✅ Yes         | Export signup stats as a CSV file       |
+| GET    | `/waiting-list/stats/export` | ✅ Yes         | Export signup stats as a CSV file       |
 | GET    | `/preview-weekly-report`   | ✅ Yes         | Preview the weekly email report (HTML)  |
 
 ✅ Daily Stats (default)
