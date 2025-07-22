@@ -68,7 +68,7 @@ php artisan tinker
 
 | Method | Endpoint                   | Auth Required | Description                             |
 | ------ | -------------------------- | ------------- | --------------------------------------- |
-| POST   | `/api/login`               | ❌ No          | Login a user and receive a bearer token |
+| POST   | `/api/login`               | ❌ No          | Login as admin and receive a bearer token |
 | POST   | `/api/waiting-list`        | ❌ No          | Add a new signup to the waiting list    |
 | GET    | `/api/waiting-list`        | ✅ Yes         | Retrieve all signups (with pagination)  |
 | PUT    | `/api/waiting-list/{id}`   | ✅ Yes         | Update a signup by ID                   |
