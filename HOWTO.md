@@ -78,3 +78,15 @@ Returns number of signups per week for the last 30 days.
 * * * * * cd /path/to/project && php artisan schedule:run >> /dev/null 2>&1
 ```
 
+
+### 🔌 Postman Collection
+
+You can test the API using this Postman collection:
+
+[📥 Download Tenamart API Postman Collection](./postman/tenamart-api.postman_collection.json)
+
+To use:
+1. Download the file.
+2. Open Postman.
+3. Click **Import** > **Upload Files** > select the file.
+4. Test the endpoints easily!

@@ -1,0 +1,127 @@
+{
+    "info": {
+        "name": "Tenamart API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "version": "2025-07-22T07:09:40.748856"
+    },
+    "item": [
+        {
+            "name": "Login",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8000/api/login",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "api",
+                        "login"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Store Waiting List Entry",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"signup_source\": \"organic\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8000/api/waiting-list",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "api",
+                        "waiting-list"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get Waiting List Stats (Daily)",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "http://localhost:8000/api/waiting-list/stats?view=daily",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "api",
+                        "waiting-list",
+                        "stats"
+                    ],
+                    "query": [
+                        {
+                            "key": "view",
+                            "value": "daily"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get Waiting List Stats (Weekly)",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "http://localhost:8000/api/waiting-list/stats?view=weekly",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "api",
+                        "waiting-list",
+                        "stats"
+                    ],
+                    "query": [
+                        {
+                            "key": "view",
+                            "value": "weekly"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
