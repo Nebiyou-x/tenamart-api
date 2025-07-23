@@ -110,3 +110,6 @@ Returns number of signups per week for the last 30 days.
 You can test the API using this Postman collection:
 
 [📥 Download Tenamart API Postman Collection](./postman/tenamart-api.postman_collection.json)
+
+
+### Dont Forget to populate .env with Mailtrap.io credentials
